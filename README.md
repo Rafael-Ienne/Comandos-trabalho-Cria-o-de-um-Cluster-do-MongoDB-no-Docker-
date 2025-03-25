@@ -6,21 +6,21 @@ Este documento descreve os passos para configurar um cluster MongoDB utilizando 
 - Docker instalado
 - MongoDB Compass instalado
 
-## Instalação do cluster do MongoDB utilizando o Docker
+## Principais comandos
 
-### 1️⃣ Criação de uma rede Docker para comunicação entre os containers
+### Instalação de um cluster do MongoDB
+
+#### Criação de uma rede Docker para comunicação entre os containers
 ```bash
 docker network create ntwkClusterMongo
 ```
 
-Verificação das redes existentes:
+#### Verificação das redes existentes:
 ```bash
 docker network ls
 ```
 
-### 2️⃣ Criação das instâncias do MongoDB
-
-#### Criação dos nós do cluster
+#### Criação das instâncias do MongoDB
 ```bash
 docker run -d --rm -p 27018:27017 --name mongo1 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo1
 docker run -d --rm -p 27019:27017 --name mongo2 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo2
@@ -29,24 +29,24 @@ docker run -d --rm -p 27021:27017 --name mongo4 --network ntwkClusterMongo mongo
 docker run -d --rm -p 27022:27017 --name mongo5 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo5
 ```
 
-Verificação se os containers estão rodando:
+#### Verificação se os containers estão rodando:
 ```bash
 docker ps
 ```
 
-### 3️⃣ Acesso à instância do MongoDB e configuração do Replica Set
+#### Acesso à instância do MongoDB e configuração do Replica Set
 
-#### Entrada no container `mongo1`
+##### Entrada no container `mongo1`
 ```bash
 docker exec -it mongo1 mongosh
 ```
 
-#### Verificação dos status do MongoDB
+##### Verificação dos status do Replica Set MongoDB
 ```javascript
 db.runCommand({hello:1})
 ```
 
-#### Inicialização econfiguração do Replica Set
+##### Inicialização e configuração do Replica Set
 ```javascript
 rs.initiate({
   _id: "myReplicaSet",
@@ -60,7 +60,7 @@ rs.initiate({
 })
 ```
 
-Verificação do status do Replica Set:
+##### Verificação do status do Replica Set:
 ```javascript
 rs.status()
 ```
