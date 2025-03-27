@@ -22,11 +22,11 @@ docker network ls
 
 #### Criação das instâncias do MongoDB
 ```bash
-docker run -d --rm -p 27018:27017 --name mongo1 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo1
-docker run -d --rm -p 27019:27017 --name mongo2 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo2
-docker run -d --rm -p 27020:27017 --name mongo3 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo3
-docker run -d --rm -p 27021:27017 --name mongo4 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo4
-docker run -d --rm -p 27022:27017 --name mongo5 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo5
+docker run -d --rm -p 27018:27017 --name mongo1 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo1
+docker run -d --rm -p 27019:27017 --name mongo2 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo2
+docker run -d --rm -p 27020:27017 --name mongo3 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo3
+docker run -d --rm -p 27021:27017 --name mongo4 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo4
+docker run -d --rm -p 27022:27017 --name mongo5 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo5
 ```
 
 #### Verificação se os containers estão rodando:
@@ -65,26 +65,45 @@ rs.initiate({
 rs.status()
 ```
 
-### 2️⃣ Teste de conexão no MongoDB Compass
-Copie os seguintes endereços e cole no MongoDB Compass para testar a conexão:
-- **Mongo1**: `mongodb://127.0.0.1:27018/?directConnection=true`
-- **Mongo2**: `mongodb://127.0.0.1:27019/?directConnection=true`
-- **Mongo3**: `mongodb://127.0.0.1:27020/?directConnection=true`
-- **Mongo4**: `mongodb://127.0.0.1:27021/?directConnection=true`
-- **Mongo5**: `mongodb://127.0.0.1:27022/?directConnection=true`
+### 2️⃣ Teste de conexão no MongoDB Compass e do Replica Set
+Copiar os seguintes endereços e colar no MongoDB Compass para testar a conexão:
+- **mongo1**: `mongodb://127.0.0.1:27018/?directConnection=true`
+- **mongo2**: `mongodb://127.0.0.1:27019/?directConnection=true`
+- **mongo3**: `mongodb://127.0.0.1:27020/?directConnection=true`
+- **mongo4**: `mongodb://127.0.0.1:27021/?directConnection=true`
+- **mongo5**: `mongodb://127.0.0.1:27022/?directConnection=true`
 
-#### Verificação se o nó é primário:
+#### Verificação de qual nó é primário:
 ```javascript
 rs.isMaster().primary
 ```
 
-#### Criação de uma collection e inserção de dados
+#### Criação da collection pessoas e inserção de dados
 ```javascript
 use pessoas
-db.pessoas.insertMany([
-  {"id": 1, "first_name": "João", "last_name": "Silva", "email": "joao@email.com"},
-  {"id": 2, "first_name": "Maria", "last_name": "Santos", "email": "maria@email.com"}
-])
+db.pessoas.insertMany([{
+ "id": 1,
+"first_name": "Hewett",
+"last_name": "Claw",
+"email": "hclaw0@google.cn",
+"gender": "Male",
+"ip_address": "10.28.26.218"
+},
+{
+  "id": 2,
+  "first_name": "Vachel",
+  "last_name": "Beszant",
+  "email": "vbeszant1@slate.com",
+  "gender": "Male",
+  "ip_address": "194.13.160.166"
+}, {
+  "id": 3,
+  "first_name": "Chan",
+  "last_name": "Skerrett",
+  "email": "cskerrett2@accuweather.com",
+  "gender": "Male",
+  "ip_address": "99.131.157.181"
+}])
 ```
 
 #### Consulta dos dados inseridos
