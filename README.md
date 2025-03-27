@@ -8,14 +8,14 @@ Este documento descreve os passos para configurar um cluster MongoDB utilizando 
 
 ## Principais comandos
 
-### Instalação de um cluster do MongoDB
+### 1️⃣ Instalação de um cluster do MongoDB
 
 #### Criação de uma rede Docker para comunicação entre os containers
 ```bash
 docker network create ntwkClusterMongo
 ```
 
-#### Verificação das redes existentes:
+#### Verificação das redes existentes
 ```bash
 docker network ls
 ```
@@ -65,7 +65,7 @@ rs.initiate({
 rs.status()
 ```
 
-### 4️⃣ Teste de conexão no MongoDB Compass
+### 2️⃣ Teste de conexão no MongoDB Compass
 Copie os seguintes endereços e cole no MongoDB Compass para testar a conexão:
 - **Mongo1**: `mongodb://127.0.0.1:27018/?directConnection=true`
 - **Mongo2**: `mongodb://127.0.0.1:27019/?directConnection=true`
@@ -73,12 +73,10 @@ Copie os seguintes endereços e cole no MongoDB Compass para testar a conexão:
 - **Mongo4**: `mongodb://127.0.0.1:27021/?directConnection=true`
 - **Mongo5**: `mongodb://127.0.0.1:27022/?directConnection=true`
 
-Verificação se o nó é primário:
+#### Verificação se o nó é primário:
 ```javascript
 rs.isMaster().primary
 ```
-
-### 5️⃣ Inserção e consulta de dados no MongoDB
 
 #### Criação de uma collection e inserção de dados
 ```javascript
@@ -94,9 +92,9 @@ db.pessoas.insertMany([
 db.pessoas.find()
 ```
 
-## Simulação de queda de nó secundário
+## 3️⃣ Simulação de queda de nó secundário
 
-### Comando de parada de um nó secundário
+### Comando de parada do nó secundário 'mongo2'
 ```bash
 docker stop mongo2
 ```
@@ -105,45 +103,43 @@ docker stop mongo2
 ```javascript
 rs.status()
 ```
+## 4️⃣ Simulação de queda de nó secundário
 
-### Parada do nó primário e verificação de nova eleição
+### Parada do nó primário mongo1 e verificação de nova eleição
 ```bash
 docker stop mongo1
 docker exec -it mongo3 mongosh
 rs.status()
 ```
 
-Verificação de qual é o novo nó primário:
+Verificação de qual é o novo nó primário no MongoDB Compass
 ```javascript
 rs.isMaster().primary
 ```
 
-### 🔄 Priorização de Eleição do Nó Primário
-Criando um novo cluster com prioridades definidas:
+##  5️⃣ Priorização de Eleição do Nó Primário
+### Criando um novo cluster com prioridades definidas:
 ```javascript
 rs.initiate({
   _id: "myReplicaSet2",
   members: [
     { _id: 1, host: "mongo10", priority: 1 },
-    { _id: 2, host: "mongo20", priority: 0, secondaryDelaySecs: 300 },
-    { _id: 3, host: "mongo30", priority: 2 }
+    { _id: 2, host: "mongo20", priority: 2 },
+    { _id: 3, host: "mongo30", priority: 10 }
   ]
 })
 ```
 
-### ⏳ Configurando Delay na Replicação
-Criando instâncias:
+## 6️⃣ Configurando delay na replicação
+### Criando instâncias:
 ```bash
 docker run -d --rm -p 27018:27017 --name mongo10 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo10
 docker run -d --rm -p 27019:27017 --name mongo20 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo20
 docker run -d --rm -p 27020:27017 --name mongo30 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo30
 ```
 
-Verifique a replicação com delay:
+### Verificação a replicação com delay
 ```javascript
 use admin
 db.runCommand({replSetGetStatus: 1})
 ```
-
-## 📢 Conclusão
-Com este setup, você criou um cluster MongoDB usando Docker, testou failover, inseriu e consultou dados, e configurou replicação com delay e prioridade de eleição de nós.
