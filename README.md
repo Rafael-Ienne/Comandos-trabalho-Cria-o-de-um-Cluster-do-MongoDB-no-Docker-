@@ -1,14 +1,14 @@
 # Configuração de um Cluster MongoDB com Docker
 
-Este documento descreve os passos para configurar um cluster MongoDB utilizando Docker, implementando um Replica Set com no mínimo quatro nós. O teste será feito via MongoDB Compass.
+Este documento descreve os passos para configurar um cluster MongoDB utilizando Docker, implementando um Replica Set com cinco nós. O teste de replicação de dados será feito via MongoDB Compass.
 
 ## 📌 Pré-requisitos
-- Docker instalado
-- MongoDB Compass instalado
+- Docker instalado;
+- MongoDB Compass instalado.
 
 ## Principais comandos
 
-### 1️⃣ Instalação de um cluster do MongoDB
+### 1️⃣ Instalação do cluster do MongoDB
 
 #### Criação de uma rede Docker para comunicação entre os containers
 ```bash
@@ -21,27 +21,40 @@ docker network ls
 ```
 
 #### Criação das instâncias do MongoDB
+##### `mongo1`
 ```bash
-docker run -d --rm -p 27018:27017 --name mongo1 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo1
-docker run -d --rm -p 27019:27017 --name mongo2 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo2
-docker run -d --rm -p 27020:27017 --name mongo3 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo3
-docker run -d --rm -p 27021:27017 --name mongo4 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo4
-docker run -d --rm -p 27022:27017 --name mongo5 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo5
+- docker run -d --rm -p 27018:27017 --name mongo1 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo1
+```
+##### `mongo2`
+```bash
+- docker run -d --rm -p 27019:27017 --name mongo2 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo2
+```
+##### `mongo3`
+```bash
+- docker run -d --rm -p 27020:27017 --name mongo3 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo3
+```
+##### `mongo4`
+```bash
+- docker run -d --rm -p 27021:27017 --name mongo4 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo4
+```
+##### `mongo5`
+```bash
+- docker run -d --rm -p 27022:27017 --name mongo5 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo5
 ```
 
-#### Verificação se os containers estão rodando:
+#### Verificação se os containers estão rodando
 ```bash
 docker ps
 ```
 
 #### Acesso à instância do MongoDB e configuração do Replica Set
 
-##### Entrada no container `mongo1`
+##### Acesso ao container `mongo1`
 ```bash
 docker exec -it mongo1 mongosh
 ```
 
-##### Verificação dos status do Replica Set MongoDB
+##### Verificação dos status do Replica Set do MongoDB
 ```javascript
 db.runCommand({hello:1})
 ```
@@ -60,7 +73,7 @@ rs.initiate({
 })
 ```
 
-##### Verificação do status do Replica Set:
+##### Verificação dos status do Replica Set
 ```javascript
 rs.status()
 ```
@@ -83,11 +96,11 @@ rs.isMaster().primary
 use pessoas
 db.pessoas.insertMany([{
  "id": 1,
-"first_name": "Hewett",
-"last_name": "Claw",
-"email": "hclaw0@google.cn",
-"gender": "Male",
-"ip_address": "10.28.26.218"
+  "first_name": "Hewett",
+  "last_name": "Claw",
+  "email": "hclaw0@google.cn",
+  "gender": "Male",
+  "ip_address": "10.28.26.218"
 },
 {
   "id": 2,
@@ -106,24 +119,24 @@ db.pessoas.insertMany([{
 }])
 ```
 
-#### Consulta dos dados inseridos
+#### Consulta dos dados inseridos na collection pessoas
 ```javascript
 db.pessoas.find()
 ```
 
 ## 3️⃣ Simulação de queda de nó secundário
 
-### Comando de parada do nó secundário 'mongo2'
+### Comando de parada do nó secundário `mongo2`
 ```bash
 docker stop mongo2
 ```
 
-### Comando para entrar no nó secundário mongo2
+### Comando para acessar o nó secundário `mongo2`
 ```bash
 docker exec -it mongo2 mongosh
 ```
 
-### Verificação de status do cluster após a queda de nó secundário
+### Verificação do status do cluster após a queda de nó secundário
 ```javascript
 rs.status()
 ```
@@ -159,20 +172,20 @@ db.pessoas.insertMany([{
   "ip_address": "45.86.111.93"}])
 ```
 
-## 4️⃣ Simulação de queda de nó secundário
+## 4️⃣ Simulação de queda de nó primário
 
-### Parada do nó primário mongo1 
+### Parada do nó primário `mongo1` 
 ```bash
 docker stop mongo1
 ```
 
-### Comando para entrar na instância do mongo3 e verificar os status do cluster
+### Comando para entrar na instância do `mongo3` e verificar os status do cluster
 ```bash
 docker exec -it mongo3 mongosh
 rs.status()
 ```
 
-### Verificação de qual é o novo nó primário no MongoDB Compass
+### Verificação de qual é o novo nó primário 
 ```javascript
 rs.isMaster().primary
 ```
@@ -205,11 +218,20 @@ db.pessoas.insertMany([{
 
 ##  5️⃣ Priorização de Eleição do Nó Primário
 ### Criando as instâncias do MongoDB
+`mongo10`
 ```javascript
 docker run -d --rm -p 27022:27017 --name mongo10 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo10
+```
+`mongo20`
+```javascript
 docker run -d --rm -p 27023:27017 --name mongo20 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo20
+```
+`mongo30`
+```javascript
 docker run -d --rm -p 27024:27017 --name mongo30 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo30
 ```
+
+### Comando para entrar na instância do `mongo10` e configurar o Replica Set
 ```javascript
 rs.initiate({
   _id: "myReplicaSet2",
@@ -221,22 +243,77 @@ rs.initiate({
 })
 ```
 
-### Comando para consultar dados n collection pessoas
+### Comando para verificar os status do cluster
 ```javascript
-use pessoas
-db.pessoas.find()
+rs.status()
 ```
 
-## 6️⃣ Configurando delay na replicação
-### Criando instâncias:
+## 6️⃣ Configurando Delay na Replicação
+### Criando instâncias do MongoDB
+`mongo10`
 ```bash
-docker run -d --rm -p 27018:27017 --name mongo10 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo10
-docker run -d --rm -p 27019:27017 --name mongo20 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo20
-docker run -d --rm -p 27020:27017 --name mongo30 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo30
+docker run -d --rm -p 27022:27017 --name mongo10 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo10
+```
+`mongo20`
+```bash
+docker run -d --rm -p 27023:27017 --name mongo20 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo20
+```
+`mongo30`
+```bash
+docker run -d --rm -p 27024:27017 --name mongo30 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo30
 ```
 
-### Verificação a replicação com delay
+### Comando para entrar na instância do `mongo30` e configurar o cluster
+```bash
+docker exec -it mongo30 mongosh
+rs.initiate({
+ _id: "myReplicaSet2",
+members: [
+ { _id: 1, host: "mongo10", priority: 1 },
+ { _id: 2, host: "mongo20", priority: 0, secondaryDelaySecs: 300 }, 
+ { _id: 3, host: "mongo30", priority: 2 } ]})
+
+```
+
+### Verificação da replicação com delay na instância do `mongo30`
 ```javascript
 use admin
 db.runCommand({replSetGetStatus: 1})
+```
+
+### Configurando as instâncias do MongoDB no MongoDB Compass
+Copiar os seguintes endereços e colar no MongoDB Compass para testar a conexão:
+- **mongo10**: `mongodb://127.0.0.1:27022/?directConnection=true`
+- **mongo20**: `mongodb://127.0.0.1:27023/?directConnection=true`
+- **mongo30**: `mongodb://127.0.0.1:27024/?directConnection=true`
+
+
+### Comando para verificar qual nó é primário
+```javascript
+rs.isMaster().primary
+```
+
+### Inserção de dados na collection pessoas pelo nó primário
+```javascript
+use pessoas
+db.pessoas.insertMany([
+   "id": 7,
+   "first_name": "Darda",
+   "last_name": "McGahern",
+   "email": "dmcgahern6@usnews.com",
+   "gender": "Female",
+   "ip_address": "211.150.191.224"
+},
+{  "id": 8,
+   "first_name": "Templeton",
+   "last_name": "Gerriet",
+   "emajl": "tgerriet7@hubpages.com",
+   "gender": "Male",
+   "ip_address": "86.238.94.23"
+}])
+```
+### Procura de dados na collection pessoas
+```javascript
+use pessoas
+db.pessoas.find()
 ```
