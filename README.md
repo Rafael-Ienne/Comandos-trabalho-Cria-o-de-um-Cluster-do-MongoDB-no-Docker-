@@ -238,6 +238,7 @@ docker run -d --rm -p 27024:27017 --name mongo30 --network testeCluster mongodb/
 
 ### Comando para entrar na instância do `mongo10` e configurar o Replica Set
 ```javascript
+docker exec -it mongo10 mongosh
 rs.initiate({
   _id: "myReplicaSet2",
   members: [
