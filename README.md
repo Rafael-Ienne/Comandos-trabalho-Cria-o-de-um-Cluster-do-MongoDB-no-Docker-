@@ -216,6 +216,11 @@ db.pessoas.insertMany([{
 }])
 ```
 
+### Procura de dados pela collection pessoas
+```bash
+db.pessoas.find()
+```
+
 ##  5️⃣ Priorização de Eleição do Nó Primário
 ### Criando as instâncias do MongoDB
 `mongo10`
