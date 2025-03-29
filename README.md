@@ -1,4 +1,4 @@
-# 🍃 Criação de um Cluster MongoDB com Docker
+# 🍃 Criação de um cluster MongoDB com Docker
 
 Este documento descreve os passos para configurar um cluster MongoDB utilizando Docker, implementando um Replica Set com cinco nós. O teste de replicação de dados será feito via MongoDB Compass.
 
