@@ -6,19 +6,9 @@ Este documento descreve os passos para configurar um cluster MongoDB utilizando 
 - Docker instalado;
 - MongoDB Compass instalado.
 
-## 📜 Menu de Seleção
-
-<ul>
-        <li><a href="#instalacao">1️⃣ Instalação do Cluster</a></li>
-        <li><a href="#funcionamento">2️⃣ Funcionamento do Cluster</a></li>
-        <li><a href="#queda-no-secundario">3️⃣ Simulação de Queda de Nó Secundário</a></li>
-        <li><a href="#queda-no-primario">4️⃣ Simulação de Queda do Nó Primário</a></li>
-        <li><a href="#outras-funcionalidades">5️⃣ Outras Funcionalidades</a></li>
-    </ul>
-
 ## ⌨️ Principais comandos
 
-<h3>1️⃣ Instalação de um cluster no MongoDB utilizando o Docker e criação de nós</h3>
+### 1️⃣ Instalação de um cluster no MongoDB utilizando o Docker e criação de nós</h3>
 
 #### Criação de uma rede Docker para comunicação entre os nós
 ```bash
@@ -86,7 +76,7 @@ rs.initiate({
 rs.status()
 ```
 
-### 2️⃣ Funcionamento do cluster
+### 2️⃣ Funcionamento do cluster</h3>
 Copiar os seguintes endereços e colar no MongoDB Compass para testar a conexão:
 - **mongo1**: `mongodb://127.0.0.1:27018/?directConnection=true`
 - **mongo2**: `mongodb://127.0.0.1:27019/?directConnection=true`
