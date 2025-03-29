@@ -124,27 +124,27 @@ db.pessoas.find()
 
 ### 3️⃣ Simulação de queda de nó secundário
 
-### Comando de parada do nó secundário `mongo2`
+#### Comando de parada do nó secundário `mongo2`
 ```bash
 docker stop mongo2
 ```
 
-### Comando para acessar o nó secundário `mongo2`
+#### Comando para acessar o nó secundário `mongo2`
 ```bash
 docker exec -it mongo2 mongosh
 ```
 
-### Verificação dos status do cluster após a queda de nó secundário
+#### Verificação dos status do cluster após a queda de nó secundário
 ```javascript
 rs.status()
 ```
 
-### Seleção de dados na collection pessoas
+#### Seleção de dados na collection pessoas
 ```bash
 db.pessoas.find()
 ```
 
-### Acesso à collection pessoas e inserção de dados pelo nó primário
+#### Acesso à collection pessoas e inserção de dados pelo nó primário
 ```bash
 use pessoas
 db.pessoas.insertMany([{
@@ -172,23 +172,23 @@ db.pessoas.insertMany([{
 
 ### 4️⃣ Simulação de queda do nó primário
 
-### Parada do nó primário `mongo1` 
+#### Parada do nó primário `mongo1` 
 ```bash
 docker stop mongo1
 ```
 
-### Acesso à instância do `mongo3` e verificação dos status do cluster
+#### Acesso à instância do `mongo3` e verificação dos status do cluster
 ```bash
 docker exec -it mongo3 mongosh
 rs.status()
 ```
 
-### Verificação de qual é o novo nó primário 
+#### Verificação de qual é o novo nó primário 
 ```javascript
 rs.isMaster().primary
 ```
 
-### Acesso à collection pessoas e inserção de dados pelo nó primário
+#### Acesso à collection pessoas e inserção de dados pelo nó primário
 ```bash
 use pessoas
 db.pessoas.insertMany([{
@@ -215,16 +215,16 @@ db.pessoas.insertMany([{
 }])
 ```
 
-### Seleção de dados na collection pessoas
+#### Seleção de dados na collection pessoas
 ```bash
 db.pessoas.find()
 ```
 
-##  5️⃣ Outras funcionalidades do Cluster
+###  5️⃣ Outras funcionalidades do Cluster
 
-### Priorização de eleição do nó primário
+##### Priorização de eleição do nó primário
 
-#### Criando as instâncias do MongoDB
+###### Criando as instâncias do MongoDB
 `mongo10`
 ```javascript
 docker run -d --rm -p 27022:27017 --name mongo10 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo10
@@ -238,12 +238,12 @@ docker run -d --rm -p 27023:27017 --name mongo20 --network testeCluster mongodb/
 docker run -d --rm -p 27024:27017 --name mongo30 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo30
 ```
 
-#### Acesso à instância do `mongo10`
+##### Acesso à instância do `mongo10`
 ```javascript
 docker exec -it mongo10 mongosh
 ```
 
-#### Configuração do Replica Set
+##### Configuração do Replica Set
 ```javascript
 rs.initiate({
   _id: "myReplicaSet2",
@@ -255,14 +255,14 @@ rs.initiate({
 })
 ```
 
-#### Verificação dos status do cluster
+##### Verificação dos status do cluster
 ```javascript
 rs.status()
 ```
 
-### Delay na Replicação
+#### Delay na Replicação
 
-#### Criando instâncias do MongoDB
+##### Criando instâncias do MongoDB
 `mongo10`
 ```bash
 docker run -d --rm -p 27022:27017 --name mongo10 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo10
@@ -276,7 +276,7 @@ docker run -d --rm -p 27023:27017 --name mongo20 --network testeCluster mongodb/
 docker run -d --rm -p 27024:27017 --name mongo30 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo30
 ```
 
-#### Acesso à instância do `mongo30` e configuração do cluster
+##### Acesso à instância do `mongo30` e configuração do cluster
 ```bash
 docker exec -it mongo30 mongosh
 rs.initiate({
@@ -288,25 +288,25 @@ members: [
 
 ```
 
-#### Verificação da replicação com delay na instância do `mongo30`
+##### Verificação da replicação com delay na instância do `mongo30`
 ```javascript
 use admin
 db.runCommand({replSetGetStatus: 1})
 ```
 
-#### Configurando as instâncias do MongoDB no MongoDB Compass
+##### Configurando as instâncias do MongoDB no MongoDB Compass
 Copiar os seguintes endereços e colar no MongoDB Compass para testar a conexão:
 - **mongo10**: `mongodb://127.0.0.1:27022/?directConnection=true`
 - **mongo20**: `mongodb://127.0.0.1:27023/?directConnection=true`
 - **mongo30**: `mongodb://127.0.0.1:27024/?directConnection=true`
 
 
-#### Verificação de qual nó é primário
+##### Verificação de qual nó é primário
 ```javascript
 rs.isMaster().primary
 ```
 
-#### Acesso à collection pessoas e inserção de dados na collection pessoas pelo nó primário
+##### Acesso à collection pessoas e inserção de dados na collection pessoas pelo nó primário
 ```javascript
 use pessoas
 db.pessoas.insertMany([
@@ -325,7 +325,7 @@ db.pessoas.insertMany([
    "ip_address": "86.238.94.23"
 }])
 ```
-### Seleção de dados na collection pessoas
+##### Seleção de dados na collection pessoas
 ```javascript
 use pessoas
 db.pessoas.find()
