@@ -222,7 +222,7 @@ db.pessoas.find()
 
 ##  5️⃣ Outras funcionalidades do Cluster
 
-### Priorização de Eleição do Nó Primário
+### Priorização de eleição do nó primário
 
 #### Criando as instâncias do MongoDB
 `mongo10`
