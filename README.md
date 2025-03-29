@@ -320,7 +320,7 @@ db.pessoas.insertMany([
 {  "id": 8,
    "first_name": "Templeton",
    "last_name": "Gerriet",
-   "emajl": "tgerriet7@hubpages.com",
+   "email": "tgerriet7@hubpages.com",
    "gender": "Male",
    "ip_address": "86.238.94.23"
 }])
