@@ -6,7 +6,7 @@ Este documento descreve os passos para configurar um cluster MongoDB utilizando 
 - Docker instalado;
 - MongoDB Compass instalado.
 
-## Principais comandos
+## ⌨️ Principais comandos
 
 ### 1️⃣ Instalação de um cluster no MongoDB utilizando o Docker e criação de nós
 
