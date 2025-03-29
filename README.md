@@ -10,7 +10,7 @@ Este documento descreve os passos para configurar um cluster MongoDB utilizando 
 
 ### 1️⃣ Instalação de um cluster no MongoDB utilizando o Docker e criação de nós
 
-#### Criação de uma rede Docker para comunicação entre os contêineres
+#### Criação de uma rede Docker para comunicação entre os nós
 ```bash
 docker network create ntwkClusterMongo
 ```
@@ -42,12 +42,12 @@ docker network ls
 - docker run -d --rm -p 27022:27017 --name mongo5 --network ntwkClusterMongo mongodb/mongodb-community-server:latest --replSet myReplicaSet --bind_ip localhost,mongo5
 ```
 
-#### Verificação se os contêineres estão rodando
+#### Verificação se os nós estão rodando
 ```bash
 docker ps
 ```
 
-#### Acesso ao contêiner `mongo1`
+#### Acesso ao nó `mongo1`
 ```bash
 docker exec -it mongo1 mongosh
 ```
