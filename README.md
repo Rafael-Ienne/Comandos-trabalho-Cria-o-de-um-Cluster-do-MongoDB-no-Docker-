@@ -6,9 +6,19 @@ Este documento descreve os passos para configurar um cluster MongoDB utilizando 
 - Docker instalado;
 - MongoDB Compass instalado.
 
+## 📜 Menu de Seleção
+
+<ul>
+        <li><a href="#instalacao">1️⃣ Instalação do Cluster</a></li>
+        <li><a href="#funcionamento">2️⃣ Funcionamento do Cluster</a></li>
+        <li><a href="#queda-no-secundario">3️⃣ Simulação de Queda de Nó Secundário</a></li>
+        <li><a href="#queda-no-primario">4️⃣ Simulação de Queda do Nó Primário</a></li>
+        <li><a href="#outras-funcionalidades">5️⃣ Outras Funcionalidades</a></li>
+    </ul>
+
 ## ⌨️ Principais comandos
 
-### 1️⃣ Instalação de um cluster no MongoDB utilizando o Docker e criação de nós
+<h3>1️⃣ Instalação de um cluster no MongoDB utilizando o Docker e criação de nós</h3>
 
 #### Criação de uma rede Docker para comunicação entre os nós
 ```bash
@@ -220,11 +230,11 @@ db.pessoas.insertMany([{
 db.pessoas.find()
 ```
 
-###  5️⃣ Outras funcionalidades do Cluster
+###  5️⃣ Outras funcionalidades do Cluster ("Priorização de eleição do nó primário" e "Delay na Replicação") 
 
-##### Priorização de eleição do nó primário
+- Priorização de eleição do nó primário
 
-###### Criando as instâncias do MongoDB
+##### Criando as instâncias do MongoDB
 `mongo10`
 ```javascript
 docker run -d --rm -p 27022:27017 --name mongo10 --network testeCluster mongodb/mongodb-community-server:latest --replSet myReplicaSet2 --bind_ip localhost,mongo10
@@ -260,7 +270,7 @@ rs.initiate({
 rs.status()
 ```
 
-#### Delay na Replicação
+- Delay na Replicação
 
 ##### Criando instâncias do MongoDB
 `mongo10`
